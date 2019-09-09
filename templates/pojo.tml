@@ -1,0 +1,47 @@
+package com.husheng.youxi.pojo;
+
+import java.util.Date;
+
+/**
+*
+* todo:${description}实体
+* ${beanModel}<br/>
+* 创建人:${author}<br/>
+* 时间：${datetime} <br/>
+* @version 1.0.0<br/>
+*
+*/
+public class ${beanModel} implements java.io.Serializable{
+	
+	<#list fields as data>
+    // ${data.comment}
+    private ${data.ctype} ${data.name};
+    </#list>
+    
+    public ${beanModel}() {
+        super();
+    }
+    
+    public ${beanModel}(<#list fields as data>${data.ctype} ${data.name}${(data_index <fields?size-1)?string(",","")}</#list>) {
+        super();
+        <#list fields as data>
+        this.${data.name} = ${data.name};
+        </#list>
+    }
+    
+	<#list fields as data>
+    public ${data.ctype} get${data.hname}() {
+        return ${data.name};
+    }
+
+    public void set${data.hname}(${data.ctype} ${data.name}) {
+        this.${data.name} = ${data.name};
+    }
+ 	</#list>
+ 	
+ 	
+ 	public String toString(<#list fields as data>${data.ctype} ${data.name}${(data_index <fields?size-1)?string(",","")}</#list>) {
+        return "${beanModel}:【<#list fields as data>this.${data.name}:"+${data.name}+"${(data_index <fields?size-1)?string(",","")}</#list>】";
+    }
+   
+}

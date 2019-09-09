@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.husheng.youxi.mapper.userClientMapper" >
+  
+ 	 <resultMap id="BaseResultMap" type="com.husheng.youxi.pojo.userClient" >
+	      <id property="id" column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+	      <result property="name" column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+	      <result property="signature" column="signature" jdbcType="VARCHAR" javaType="java.lang.String" />
+	      <result property="sex" column="sex" jdbcType="INTEGER" javaType="java.lang.Integer" />
+	      <result property="headImg" column="head_img" jdbcType="VARCHAR" javaType="java.lang.String" />
+	      <result property="province" column="province" jdbcType="VARCHAR" javaType="java.lang.String" />
+	      <result property="city" column="city" jdbcType="VARCHAR" javaType="java.lang.String" />
+	      <result property="worksId" column="works_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+	      <result property="integral" column="integral" jdbcType="INTEGER" javaType="java.lang.Integer" />
+	      <result property="status" column="status" jdbcType="INTEGER" javaType="java.lang.Integer" />
+	      <result property="createTime" column="create_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+	      <result property="updateTime" column="update_time" jdbcType="VARCHAR" javaType="java.lang.String" />
+  	</resultMap>
+  
+  	<sql id="Base_Column_List">
+  		id,name,signature,sex,head_img,province,city,works_id,integral,status,create_time,update_time
+  	</sql>
+  	
+  	<select id="queryuserClientAll" resultMap="BaseResultMap" parameterType="com.husheng.youxi.core.Params">
+  		SELECT
+			<include refid="Base_Column_List"></include>
+		FROM
+			user_client
+		<where>	
+			<if test="status !=null">
+				and status = #{status}
+			</if>
+			<if test="isDelete !=null">
+				and is_deleted = #{isDelete}
+			</if>
+			<if test="keyword !=null and keyword!=''">
+	  			<bind name="searchkey" value="'%'+keyword+'%'"/>
+				and name like #{searchkey}	
+			</if>
+		</where>
+		order by ${sort}
+  	</select>
+  
+  	<select id="getuserClientById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  		SELECT
+			<include refid="Base_Column_List"></include>
+		FROM
+			user_client
+		WHERE
+			id = #{id}
+  	</select>
+
+	<select id="queryuserClientAllForMap" resultType="java.util.Map" parameterType="com.husheng.youxi.core.Params">
+	SELECT
+		id as id,
+		name as name,
+		signature as signature,
+		sex as sex,
+		head_img as headImg,
+		province as province,
+		city as city,
+		works_id as worksId,
+		integral as integral,
+		status as status,
+		create_time as createTime,
+		update_time as updateTime
+	FROM
+	user_client
+	<where>
+		<if test="status !=null">
+			and status = #{status}
+		</if>
+		<if test="isDelete !=null">
+			and is_deleted = #{isDelete}
+		</if>
+		<if test="keyword !=null and keyword!=''">
+			<bind name="searchkey" value="'%'+keyword+'%'"/>
+			and name like #{searchkey}
+		</if>
+	</where>
+	order by ${sort}
+   </select>
+
+	<select id="getuserClientByIdForMap" resultType="java.util.Map" parameterType="java.lang.Integer" >
+	SELECT
+		id as id,
+		name as name,
+		signature as signature,
+		sex as sex,
+		head_img as headImg,
+		province as province,
+		city as city,
+		works_id as worksId,
+		integral as integral,
+		status as status,
+		create_time as createTime,
+		update_time as updateTime
+	FROM
+	user_client
+	WHERE
+	id = #{id}
+	</select>
+  	
+  	<insert id="saveuserClient" flushCache="true" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+  		insert into user_client (name,signature,sex,head_img,province,city,works_id,integral,status,create_time,update_time)values(#{name,jdbcType=VARCHAR},#{signature,jdbcType=VARCHAR},#{sex,jdbcType=INTEGER},#{headImg,jdbcType=VARCHAR},#{province,jdbcType=VARCHAR},#{city,jdbcType=VARCHAR},#{worksId,jdbcType=INTEGER},#{integral,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{createTime,jdbcType=VARCHAR},#{updateTime,jdbcType=VARCHAR})
+  	</insert>
+  	
+  	<update id="updateuserClient" parameterType="com.husheng.youxi.pojo.userClient" flushCache="true">
+  		update user_client 
+  		<set>
+			<if test="id!=null">id = #{id,jdbcType=INTEGER},</if>
+			<if test="name!=null and name!=''">name = #{name,jdbcType=VARCHAR},</if>
+			<if test="signature!=null and signature!=''">signature = #{signature,jdbcType=VARCHAR},</if>
+			<if test="sex!=null">sex = #{sex,jdbcType=INTEGER},</if>
+			<if test="headImg!=null and headImg!=''">head_img = #{headImg,jdbcType=VARCHAR},</if>
+			<if test="province!=null and province!=''">province = #{province,jdbcType=VARCHAR},</if>
+			<if test="city!=null and city!=''">city = #{city,jdbcType=VARCHAR},</if>
+			<if test="worksId!=null">works_id = #{worksId,jdbcType=INTEGER},</if>
+			<if test="integral!=null">integral = #{integral,jdbcType=INTEGER},</if>
+			<if test="status!=null">status = #{status,jdbcType=INTEGER},</if>
+			<if test="createTime!=null and createTime!=''">create_time = #{createTime,jdbcType=VARCHAR},</if>
+			<if test="updateTime!=null and updateTime!=''">update_time = #{updateTime,jdbcType=VARCHAR},</if>
+  		</set>
+  		where id = #{id}
+  	</update>
+  	
+  	<delete id="deleteuserClientById" flushCache="true">
+  		<!-- delete from admin_client where id = #{id} -->
+  		update user_client set is_deleted = 1,update_time=now() where id = #{id}
+  	</delete>
+  	
+  	<delete id="deleteuserClientByIds">
+  		update user_client  set is_deleted = 1,update_time=now() where id in
+  		 <foreach collection="opids" index="index" item="item"
+            open="(" separator="," close=")">
+            #{item}
+        </foreach>
+  	</delete>
+ </mapper>	

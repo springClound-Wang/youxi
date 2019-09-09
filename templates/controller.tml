@@ -1,0 +1,126 @@
+package com.husheng.youxi.controller.${model};
+import com.husheng.youxi.pojo.${beanModel};
+import com.husheng.youxi.service.${model}.I${beanModel}Service;
+import com.husheng.youxi.core.ServerResponse;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * 
+ * todo:${description}Controller控制器类
+ * ${beanModel}Controller<br/>
+ * 作者:${author}<br/>
+ * 创建时间：${datetime} <br/>
+ * @version 1.0.0<br/>
+ *
+ */
+@RestController
+@Api(description = "${description}",tags = "${description}")
+@RequestMapping("/api/${model}")
+public class ${beanModel}Controller {
+	
+	@Autowired
+	private I${beanModel}Service ${model}Service;
+
+	/**
+	 * 查询${description}信息并分页
+	 * 方法名：get${beanModel}<br/>
+	 * 创建人：${author} <br/>
+	 * 时间：${datetime} <br/>
+	 * 手机:${phone}<br/>
+	 * @return ServerResponse<br/>
+	 * @exception <br/>
+	 * @since  1.0.0<br/>
+	*/
+	@GetMapping("/queryall")
+	@ApiOperation(value="查询${description}信息并分页", notes="查询${description}信息并分页")
+	public ServerResponse ${model}queryall(@RequestParam(value="pageNo",defaultValue="1",required=false) Integer pageNo,
+			@RequestParam(value="pageSize",defaultValue="10",required=false) Integer pageSize,
+			@RequestParam(value="keyword",defaultValue="",required=false) String keyword) {
+		return ${model}Service.query${beanModel}AllForMap(keyword,pageNo, pageSize);
+	}
+	
+	/**
+	 * 根据id查询信息
+	 * 方法名：get${beanModel}<br/>
+	 * 创建人${author} <br/>
+	 * 时间：${datetime} <br/>
+	 * 手机:${phone}<br/>
+	 * @param id
+	 * @return ServerResponse<br/>
+	 * @exception <br/>
+	 * @since  1.0.0<br/>
+	 */
+	@GetMapping("/get/{id}")
+	@ApiOperation(value="根据ID获取${description}", notes="根据ID获取${description}")
+	public ServerResponse get${beanModel}(@PathVariable("id") Integer id) {
+		return ${model}Service.get${beanModel}ByIdForMap(id);
+	}
+
+	/**
+	 * 保存
+	 * 方法名：save${beanModel}<br/>
+	 * 创建人：${author} <br/>
+	 * 时间：${datetime}<br/>
+	 * 手机:${phone}<br/>
+	 * @return ServerResponse<br/>
+	 * @exception <br/>
+	 * @since  1.0.0<br/>
+	 */
+	@PostMapping("/save")
+	@ApiOperation(value="保存${description}", notes="保存${description}信息")
+	public ServerResponse save${beanModel}(@RequestBody ${beanModel} ${model}) {
+		return ${model}Service.save${beanModel}(${model});
+	}
+	
+	/**
+	 * 修改
+	 * 方法名：update${beanModel}<br/>
+	 * 创建人：${author} <br/>
+	 * 时间：${datetime} <br/>
+	 * 手机:${phone}<br/>
+	 * @return ServerResponse<br/>
+	 * @exception <br/>
+	 * @since  1.0.0<br/>
+	 */
+	@PostMapping("/update")
+	@ApiOperation(value="修改${description}", notes="修改${description}")
+	public ServerResponse update${beanModel}(@RequestBody ${beanModel} ${model}) {
+		return ${model}Service.update${beanModel}(${model});
+	}
+
+	/**
+	 * 删除
+	 * 方法名：delete${beanModel}<br/>
+	 * 创建人：${author} <br/>
+	 * 时间：${datetime} <br/>
+	 * 手机:${phone}<br/>
+	 * @param id
+	 * @return ServerResponse<br/>
+	 * @exception <br/>
+	 * @since  1.0.0<br/>
+	 */
+	@GetMapping("/delete/{id}")
+	@ApiOperation(value="删除${description}", notes="删除${description}")
+	public ServerResponse delete${beanModel}(@PathVariable("id") Integer id) {
+		return ${model}Service.delete${beanModel}ById(id);
+	}
+
+	/**
+	 * 根据ids批量删除信息
+	 * 方法名：deleteBatch<br/>
+	 * 创建人：${author} <br/>
+	 * 时间：${datetime} <br/>
+	 * 手机:${phone}<br/>
+	 * @return ServerResponse<br/>
+	 * @exception <br/>
+	 * @since  1.0.0<br/>
+	*/
+	@GetMapping("/deleteBatch")
+	@ApiOperation(value="批量删除${description}", notes="批量删除${description}")
+	public ServerResponse deleteBatch(@RequestParam("opids") String opids) {
+		return ${model}Service.delete${beanModel}ByIds(opids);
+	}	
+}

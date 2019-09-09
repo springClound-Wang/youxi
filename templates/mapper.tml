@@ -1,0 +1,39 @@
+package com.husheng.youxi.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
+import com.husheng.youxi.core.Params;
+import com.husheng.youxi.pojo.${beanModel};
+
+/**
+ * 
+ * todo:${description}数据层
+ * ${beanModel}Mapper<br/>
+ * 创建人:${author}<br/>
+ * 时间：${datetime} <br/>
+ * @version 1.0.0<br/>
+ *
+ */
+public interface ${beanModel}Mapper {
+
+	//添加
+	public int save${beanModel}(${beanModel} ${model});
+	//修改
+	public int update${beanModel}(${beanModel} ${model});
+	//删除
+	public int delete${beanModel}ById(@Param("id")Integer id);
+	//查询单个
+	public ${beanModel} get${beanModel}ById(@Param("id")Integer id);
+	//查询所有
+	public List<${beanModel}> query${beanModel}All(Params params);
+	// 查询所有
+	public List<Map<String,Object>> query${beanModel}AllForMap(Params params);
+	//查询单个
+	public Map<String,Object> get${beanModel}ByIdForMap(@Param("id")Integer id);
+	//删除多个
+	public int delete${beanModel}ByIds(@Param("opids")List<Integer> idIntegers);
+
+}

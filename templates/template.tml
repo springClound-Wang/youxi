@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html class=" ">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>${description}-药消通企业级开发平台</title>
+${Include('common/common.html')}
+<style>
+	[v-cloak]{display:none;}
+	.page-bar li{list-style:none;display:inline-block;}
+	.page-bar li:first-child>a{margin-left:0px}
+	.page-bar a{border:1px solid #ddd;text-decoration:none;position:relative;float:left;padding:6px 12px;margin-left:-1px;line-height:1.42857143;color:#409EFF;cursor:pointer}
+	.page-bar a:hover{background-color:#eee;}
+	.page-bar .active a{color:#fff;cursor:default;background-color:#409EFF;border-color:#409EFF;}
+	.page-bar i{font-style:normal;color:#d44950;margin:0px 4px;font-size:12px;}
+</style>
+</head>
+<body>
+	<div id="childrenapp" v-cloak class="el-scrollbar"
+		style="height: 100%;">
+		<div class="el-scrollbar__wrap"
+			style="margin-bottom: -17px; margin-right: -17px;">
+			<div class="el-scrollbar__view">
+				<div class="basic-container avue-view">
+					  <div class="el-card is-always-shadow"> 
+			   <div class="el-card__body"> 
+			    <div class="avue-crud"> 
+			     <form class="el-form el-form--inline avue-crud-search__search"> 
+			      <div class="el-form-item"> 
+			       <label for="name" class="el-form-item__label">请输入关键词</label> 
+			       <div class="el-form-item__content"> 
+			        <div aria-describedby="el-tooltip-8045" tabindex="0" class="el-tooltip avue-input"> 
+			         <div class="el-input el-input--small el-input--suffix"> 
+			          <input type="text" autocomplete="off" v-model="keyword" placeholder="请输入关键词" class="el-input__inner" /> 
+			         </div> 
+			        </div> 
+			       </div> 
+			      </div> 
+			      <div class="el-form-item avue-crud-search__searchMenu"> 
+			       <div class="el-form-item__content"> 
+			        <button type="button" @click="search" class="el-button el-button--primary el-button--small"> <i class="el-icon-search"></i><span>搜 索</span> </button> 
+			       </div> 
+			      </div> 
+			     </form> 
+			     <div class="avue-crud__menu"> 
+			      <div class="avue-crud__left"> 
+			       <button type="button" @click="showAdd" class="el-button el-button--primary el-button--small"> <i class="el-icon-plus"></i><span>新 增</span> </button> 
+			       <button type="button" @click="deleteAll" class="el-button el-button--danger el-button--small is-plain"> <i class="el-icon-delete"></i><span>删 除 </span> </button> 
+			      </div> 
+			      <div class="avue-crud__right">
+			      </div> 
+			     </div>
+			    </div>
+			  <div class="el-table el-table--fit el-table--border el-table--enable-row-transition el-table--medium">
+					<div class="el-table__header-wrapper">
+						<table cellspacing="0" cellpadding="0" border="0" class="el-table__header" style="width: 100%;">
+							<thead class="has-gutter">
+								<tr>
+									<th colspan="1" rowspan="1" class="w50 tc is-leaf"><div class="cell"><input type="checkbox" v-model="checked" v-on:click="checkAll" /></div></th>
+						   <#list fields as data>
+								<#if data.name=="id"> 	
+									<th colspan="1" width="50" rowspan="1" class="w50 tc  is-leaf"><div class="cell" width="50">编号</div></th>
+								<#elseif data.name=="name"> 		
+									<th colspan="1" rowspan="1" class="el-table_8_column_49 is-leaf"><div class="cell">名字</div></th>
+								<#elseif data.name=="description"> 		
+									<th colspan="1" rowspan="1" class="el-table_8_column_50 is-leaf"><div class="cell">描述</div></th>
+								<#elseif data.name=="status"> 		
+									<th colspan="1" rowspan="1" class="el-table_8_column_51 is-leaf"><div class="cell">发布状态</div></th>
+								<#elseif data.name=="createTime"> 		
+									<th colspan="1" rowspan="1" class="el-table_8_column_52 is-leaf"><div class="cell">创建时间</div></th>
+								<#elseif data.name=="userId"> 		
+									<th colspan="1" rowspan="1" class="el-table_8_column_53 is-leaf"><div class="cell">操作者</div></th>
+								<#else>
+									<#if data.name!="isDeleted">
+										<th colspan="1" rowspan="1" class="el-table_8_column_53 is-leaf"><div class="cell">${data.name}</div></th>
+									</#if>
+								</#if>
+							</#list>		
+									<th colspan="1" rowspan="1" class="el-table_8_column_56 is-center is-leaf"><div class="cell">操作</div></th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+					<div class="el-table__body-wrapper is-scrolling-none">
+						<table cellspacing="0" cellpadding="0" border="0"
+							class="el-table__body" style="width: 100%;">
+							<tbody>
+								<tr class="el-table__row" v-for="(data,index) in results">
+									<td class="w50 tc"><input type="checkbox" class="el-checkbox__originacl" v-model='checkboxList' :value="data.id"></td>
+							 <#list fields as data>
+								<#if data.name=="id"> 	
+									<td class="w50 tc">{{data.id}}</td>
+								<#elseif data.name=="name"> 		
+									<td rowspan="1" colspan="1" class="el-table_8_column_47"><div class="cell">{{data.name}}</div></td>
+								<#elseif data.name=="description"> 		
+									<td rowspan="1" colspan="1" class="el-table_8_column_48"><div class="cell">{{data.description}}</div></td>
+								<#elseif data.name=="status"> 		
+									<td rowspan="1" colspan="1" class="el-table_8_column_49"><div class="cell" @click="changeStatus(index,data.id)" style="cursor: pointer;color:#409eff;"><span><span>{{data.status==1?"发布":"未发布"}}</span></span></div></td>
+								<#elseif data.name=="createTime"> 		
+									<td rowspan="1" colspan="1" class="el-table_8_column_50"><div class="cell"><span><span>{{data.createTime}}</span></span></div></td>
+								<#elseif data.name=="userId"> 		
+									<td rowspan="1" colspan="1" class="el-table_8_column_51"><div  class="cell"><span><span>{{data.adminUser.username}}</span></span></div></td>
+								<#else>
+									<#if data.name!="isDeleted">
+									<td colspan="1" rowspan="1" class="el-table_8_column_52 is-leaf"><div class="cell">${kuohao3('data.'+data.name)}</div></td>
+									</#if>
+								</#if>
+							</#list>			
+									<td rowspan="1" colspan="1" class="el-table_8_column_55  ">
+										<div class="cell"> 
+											<button type="button" class="el-button el-button--text el-button--small" @click="showEditDialog(index,data.id)"><i class="el-icon-edit"></i><span>编 辑</span></button>
+											<button type="button" @click="showDelDialog(index,data.id)" class="el-button el-button--text el-button--small"><i class="el-icon-delete"></i><span>删 除</span></button>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+							<tfoot>
+								<tr><td v-show="this.page.total == 0 " colspan="16" style="text-align: center;">暂无记录</td></tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+				<div class="avue-crud__pagination">
+					<div class="el-pagination is-background">
+						 <vue-nav :cur="cur" :all="all" :url="url" :total="page.total" :callback="pageCallback"></vue-nav>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	  <transition-group enter-active-class="bounceIn" leave-active-class="bounceOut"> 
+	   <div tabindex="-1" role="dialog" aria-modal="true" aria-label="dialog" class="el-message-box__wrapper animated" style="z-index: 2007;" v-show="isDeleteDialog" :key="1"> 
+	    <div class="el-message-box"> 
+	     <div class="el-message-box__header"> 
+	      <div class="el-message-box__title"> 
+	       <span></span> 
+	      </div> 
+	      <button type="button" aria-label="Close" class="el-message-box__headerbtn"> <i class="el-message-box__close el-icon-close"></i> </button> 
+	     </div> 
+	     <div class="el-message-box__content"> 
+	      <div class="el-message-box__message"> 
+	       <p>你确定删除, 是否继续?</p> 
+	      </div> 
+	      <div class="el-message-box__input" style="display: none;"> 
+	       <div class="el-input"> 
+	        <input type="text" autocomplete="off" placeholder="" class="el-input__inner" /> 
+	       </div> 
+	       <div class="el-message-box__errormsg" style="visibility: hidden;"></div> 
+	      </div> 
+	     </div> 
+	     <div class="el-message-box__btns"> 
+	      <button type="button" @click="hideDelDialog" class="el-button el-button--default el-button--small"> <span> 取消 </span> </button> 
+	      <button type="button" @click="confirmDel" class="el-button el-button--default el-button--small el-button--primary "> <span> 确定 </span> </button> 
+	     </div> 
+	    </div> 
+	   </div> 
+	  </transition-group> 
+	  <div class="v-modal" v-show="isDeleteDialog" tabindex="0" style="z-index: 2006;"></div> 
+	  <transition enter-active-class="animated zoomInLeft" leave-active-class="animated zoomOutRight"> 
+	   <div role="alert" class="el-message el-message--warning  el-message-fade-leave-to" v-show="isAlertDialog" style="top: 20px; z-index: 2013;">
+	    <i class="el-message__icon el-icon-warning"></i>
+	    <p class="el-message__content">{{alertMessage}}</p>
+	   </div> 
+	  </transition> 
+	    <transition enter-active-class="animated zoomInLeft" leave-active-class="animated zoomOutRight"> 
+	   <div role="alert" class="el-message el-message--success  el-message-fade-leave-to" v-show="isSuccessDialog" style="top: 20px; z-index: 2013;">
+	    <i class="el-message__icon el-icon-success"></i>
+	    <p class="el-message__content">{{successMessage}}</p>
+	   </div> 
+	  </transition> 
+	  <transition enter-active-class="animated zoomInLeft" leave-active-class="animated zoomOutRight"> 
+	   <div role="alert" class="el-message el-message--error  el-message-fade-leave-to" v-show="isErrorDialog" style="top: 20px; z-index: 2013;">
+	    <i class="el-message__icon el-icon-error"></i>
+	    <p class="el-message__content">{{errorMessage}}</p>
+	   </div> 
+	  </transition> 
+	  <div class="avue-drawer avue-crud__dialog" v-show="isShowAddDialog"> 
+	   <div class="avue-mask" @click="hideAddDialog"></div> 
+	   <div class="avue-drawer__wrapper" style="width: 60%;"> 
+	    <div class="avue-drawer__content"> 
+	     <div class="avue-drawer__header"> 
+	      <span class="avue-drawer__title">{{this.result.id==null?&quot;新增&quot;:&quot;修改&quot;}}</span> 
+	     </div> 
+	     <div class="avue-drawer__body"> 
+	      <div style="height: calc(100% - 55px); overflow: hidden;"> 
+	       <div class="el-scrollbar" style="height: 100%;"> 
+	        <div class="el-scrollbar__wrap" style=""> 
+	         <div class="el-scrollbar__view"> 
+	          <div class="avue-form" style="width: 100%;"> 
+	           <form class="el-form"> 
+	            <div class="el-row" span="24"> 
+	             <div class="avue-group"> 
+	              <div class="el-row avue-group__item" span="24"> 
+	               <div class="avue-form__group"> 
+	                
+					<#list fields as data>
+						<#if data.name =='name'>
+		                <div class="el-form-item el-form-item--feedback is-required el-form-item--medium avue-form__item--" style="width:99%;"> 
+			                 <input type="hidden" v-model="result.id" /> 
+			                 <label for="account" class="el-form-item__label" style="width: 80px;">名称</label> 
+			                 <div class="el-form-item__content" style="margin-left: 90px;"> 
+			                  <div class="el-tooltip avue-input" aria-describedby="el-tooltip-7839" tabindex="0"> 
+			                   <div class="el-input el-input--medium el-input--suffix"> 
+			                    <input type="text" autocomplete="off" placeholder="请输入 名字" v-model="result.name" maxlength="50" class="el-input__inner" /> 
+			                   </div> 
+			                  </div> 
+			                 </div> 
+		                </div> 
+		                
+		                <#elseif data.name =="description">
+		                	<div class="el-form-item el-form-item--feedback is-required el-form-item--medium avue-form__item--" style="width:99%;"> 
+			                 <label for="account" class="el-form-item__label" style="width: 80px;">描述</label> 
+			                 <div class="el-form-item__content" style="margin-left: 90px;"> 
+			                  <div class="el-tooltip avue-input" aria-describedby="el-tooltip-7839" tabindex="0"> 
+			                   <div class="el-input el-input--medium el-input--suffix"> 
+			                    <textarea style="height:100px;" placeholder="请输入 描述" v-model="result.description" maxlength="200" class="el-input__inner el-input__area"> </textarea> 
+			                   </div> 
+			                  </div> 
+			                 </div> 
+			                </div> 
+		                
+		                <#elseif data.name=="status">
+		                	<div class="el-col el-col-24 el-col-offset-0 el-col-xs-24 el-col-md-12 avue-form__row" style="padding-left: 10px; padding-right: 10px;"> 
+			                 <div class="el-form-item el-form-item--feedback el-form-item--medium avue-form__item--"> 
+			                  <label for="sex" class="el-form-item__label" style="width: 80px;">发布状态</label> 
+			                  <div class="el-form-item__content" style="margin-left: 80px;"> 
+			                   <div class="el-tooltip" aria-describedby="el-tooltip-7168" tabindex="0"> 
+			                    <div class="el-select el-select--medium"> 
+			                     <div class="el-input el-input--medium el-input--suffix"> 
+			                      <input type="hidden" v-model="result.status" /> 
+			                      <input type="text" readonly="readonly" :value="result.status==1?'发布':'未发布'" autocomplete="off" placeholder="请选择发布状态" class="el-input__inner" @click="isShowMale=!isShowMale" /> 
+			                      <span class="el-input__suffix"><span class="el-input__suffix-inner"><i class="el-select__caret el-input__icon el-icon-arrow-up"></i> 
+			                        </span> </span> 
+			                     </div> 
+			                     <div class="el-select-dropdown el-popper" v-show="isShowMale" style="min-width: 446px;"> 
+			                      <div class="el-scrollbar" style=""> 
+			                       <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin-right: -17px;"> 
+			                        <ul class="el-scrollbar__view el-select-dropdown__list"> 
+			                         <li class="el-select-dropdown__item" @click="changeStatusOp(1)" :class="{'selected':result.status==1}"><span>发布</span></li> 
+			                         <li class="el-select-dropdown__item" @click="changeStatusOp(0)" :class="{'selected':result.status==0}"><span>未发布</span></li> 
+			                        </ul> 
+			                       </div> 
+			                      </div> 
+			                     </div> 
+			                    </div> 
+			                   </div> 
+			                  </div> 
+			                 </div> 
+			                </div>
+			             <#else>
+			             	 <#if data.name!="isDeleted" && data.name!="id" && data.name!="userId" && data.name!="createTime" && data.name!="updateTime">
+			            	 <div class="el-form-item el-form-item--feedback is-required el-form-item--medium avue-form__item--" style="width:99%;"> 
+				                 <input type="hidden" v-model="result.id" /> 
+				                 <label for="account" class="el-form-item__label" style="width: 80px;">${data.name}</label> 
+				                 <div class="el-form-item__content" style="margin-left: 90px;"> 
+				                  <div class="el-tooltip avue-input" aria-describedby="el-tooltip-7839" tabindex="0"> 
+				                   <div class="el-input el-input--medium el-input--suffix"> 
+				                    <input type="text" autocomplete="off" placeholder="请输入 名字" v-model="${'result.'+data.name}" maxlength="200" class="el-input__inner" /> 
+				                   </div> 
+				                  </div> 
+				                 </div> 
+			                </div> 
+			                </#if>	
+		                </#if>		
+		                
+	                </#list>
+	               </div> 
+	              </div> 
+	             </div> 
+	            </div> 
+	           </form> 
+	          </div> 
+	         </div> 
+	        </div> 
+	       </div> 
+	      </div> 
+	     </div> 
+	     <div class="avue-drawer__footer"> 
+	      <span class="dialog-footer"><button type="button" v-if="this.result.id==null" @click="saveAdminClient" class="el-button el-button--primary el-button--medium"> 
+	        <span>保 存</span> </button> <button type="button" v-if="this.result.id!=null" @click="editAdminClient" class="el-button el-button--primary el-button--medium"> 
+	        <span>修 改</span> </button> <button type="button" @click="hideAddDialog" class="el-button el-button--default el-button--medium"> 
+			<span>取 消</span> </button></span> 
+	     </div> 
+	    </div> 
+	   </div> 
+	  </div> 
+	  </div>
+	  </div> 
+	  </div>
+	
+	<script src="${rootPath}/resources/js/vue.js"></script>
+	<script src="${rootPath}/resources/js/axios-0.18.0.js"></script>
+	<script src="${rootPath}/resources/js/vue-nav.js"></script>
+	<script src="${rootPath}/resources/js/common.js"></script>
+	<script>
+	var vue = new Vue({
+		el:"#childrenapp",
+		data:{
+		 	cur: 1, //当前第几页
+			all:0,  // 分页总数
+			url:"javascript:void(0);",//  分页的地址，如果是ajax不用更改
+			pageNo:1,//后台分页参数
+		 	pageSize:10,//每页按时10条
+			opid:0, // 修改时候的id
+			currentIndex:0, //当前操作的元素索引
+			isAlertDialog:false,
+			alertMessage:"",
+		 	isShowMale:false,// 是否显示状态框
+			isShowAddDialog:false, //控制添加和编辑提示框的状态
+			isDeleteDialog:false,//控制删除提示框的状态
+			isSuccessDialog:false,
+		  	successMessage:"",
+		 	isErrorDialog:false,
+		 	errorMessage:"",
+			page:{},//分页对象
+			results:[],// 数据装在对象
+			isDeleteAll:false,//控制全选
+			checkboxList:[],//全选以后数据装载的容器
+			result:{},//编辑和添加的装载对象
+			checked: false,//控制全选按钮的选择状态
+			keyword:""//搜索关键词
+		},
+		
+		//  入口函数
+		created(){
+			this.loadData();
+		},
+		
+		// 分页组件加载
+		components:{
+	       'vue-nav': Vnav
+	    },
+	    
+	    // 监听选中容器变化
+	    watch: {
+	        checkboxList: {
+	            handler: function (val, oldVal) { 
+	                if (this.checkboxList.length === this.results.length) {
+	                    this.checked=true;
+	                } else {
+	                    this.checked=false;
+	                }
+	            },
+	            deep: true
+	        }
+	    },
+	    
+	    // 事件列表
+		methods:{
+			
+			// 选择状态的下来
+			changeStatusOp(status){
+				this.result.status = status;
+				this.isShowMale = false;
+			},
+			
+			//  全选
+			checkAll(e){
+				if (this.checked) {//实现反选
+	                this.checkboxList = [];
+	            } else { //实现全选
+	                this.checkboxList = [];
+	                this.results.forEach( (item) => {
+	                    this.checkboxList.push(item.id);
+	                });
+	            }
+			},
+			
+			// 显示添加框
+			showAdd(){
+				this.opid = 0;
+				this.currentInddex = 0;
+				this.result = {};
+				this.isShowMale = false;
+				this.isShowAddDialog = true;
+			},
+			
+			// 编辑弹出框
+			showEditDialog(index,opid){
+				this.opid = opid;
+				this.currentInddex = index;
+				request.get("${model}/get/"+opid).then(res=>{
+					this.result = res.data.data;
+					this.isShowMale = false;
+					this.isShowAddDialog = true;
+				});
+				
+			},
+			
+			// 隐藏添加框
+			hideAddDialog(){
+				this.opid = 0;
+				this.currentInddex = 0;
+				this.result = {};
+				this.isShowAddDialog = false;
+			},
+			
+			// 保存逻辑
+			saveAdminClient(){
+				if(isEmpty(this.result.name)){
+					this.showAlert("请输入名字!",2000);
+					return;
+				}
+				
+				request.post("${model}/save",this.result).then(res=>{
+					if(res.status==200){
+						this.opid = 0;
+						this.currentInddex = 0;
+						this.result = {};
+						this.isShowAddDialog = false;
+						this.search();
+						this.showAlert("保存成功!",2000);
+					}
+				});
+			},
+			
+			// 修改逻辑
+			editAdminClient(){
+				
+				if(isEmpty(this.result.name)){
+					this.showAlert("请输入名字!",2000);
+					return;
+				}
+				
+				request.post("${model}/update",this.result).then(res=>{
+					if(res.status==200){
+						this.opid = 0;
+						this.currentInddex = 0;
+						this.result = {};
+						this.isShowAddDialog = false;
+						this.search();
+						this.showAlert("修改成功!",2000);
+					}
+				});
+			},
+			
+			
+			// 显示提示框
+			showDelDialog(index,opid){
+				this.isDeleteDialog = true;
+				this.isDeleteAll = false;
+				this.currentIndex = index;
+				this.opid = opid;
+			},
+			
+			// 显示删除提示框
+			hideDelDialog(){
+				this.isDeleteDialog = false;
+				this.checked = false;
+				this.checkboxList = [];
+			},
+			
+			//  点击确认是否删除，全部删除
+			confirmDel(){
+				if(!this.isDeleteAll){
+					request.get("${model}/delete/"+this.opid).then(res=>{
+						this.isDeleteDialog = false;
+						this.search();
+					});
+				}else{
+					var opids = this.checkboxList.join(",");
+					request.get("${model}/deleteBatch?opids="+opids).then(res=>{
+						this.isDeleteDialog = false;
+						this.search();
+					});
+				}
+			},
+			
+			//  删除所有的时候确认框
+			deleteAll(){
+				if(this.checkboxList.length == 0 ){
+					this.showAlert("请选择至少一条数据...",2000);
+					return;
+				}
+				
+				this.isDeleteDialog = true;
+				this.isDeleteAll = true;
+			},
+			
+			// 点击修改状态的切换
+			changeStatus(index,opid){
+				var status = this.results[index].status;
+				status = status == 1?0:1;
+				request.post("${model}/update",{id:opid,status:status}).then(res=>{
+					this.results[index].status = status;
+				});
+			},
+			
+			// 加载并分页数据
+			loadData(){
+				this.showAlert("数据正在加载....!",3000);
+				request.get("${model}/queryall?pageNo="+this.pageNo+"&pageSize="+this.pageSize+"&keyword="+this.keyword).then(res=>{
+					if(res.status == 200){
+						this.page = res.data.data;
+						res.data.data.list.forEach(function(obj,index){
+							obj.checked = false;
+						});
+						
+						this.results = res.data.data.list;
+						this.all = res.data.data.pages;
+						this.showAlert("数据加载完毕....!",3000);
+					}
+				})
+			},
+			
+			//  搜索业务 
+			search(){
+	        	this.cur = 1;
+	            this.pageNo = 1;
+	            this.checkboxList = [];
+				this.checked = false;
+	            this.loadData();
+			},
+			
+			// 点击分页执行回调函数
+			pageCallback(data) {
+	            //TODO
+	            this.cur = data;
+	            this.pageNo = data;
+	            this.results = [];
+	            this.loadData();
+	        },
+	        
+	        showAlert(message,time,flag){
+	        	if(flag=="warn"){
+		        	this.isAlertDialog = true;
+		        	this.alertMessage = message;
+					if(this.timer)clearTimeout(this.timer);
+					this.timer = setTimeout(()=>{
+						this.isAlertDialog = false;
+					},time || 2000);
+	        	}else if(flag=="error"){
+	        		this.isErrorDialog = true;
+		        	this.errorMessage = message;
+					if(this.timer)clearTimeout(this.timer);
+					this.timer = setTimeout(()=>{
+						this.isErrorDialog = false;
+					},time || 2000);
+	        	}else{
+	        		this.isSuccessDialog = true;
+		        	this.successMessage = message;
+					if(this.timer)clearTimeout(this.timer);
+					this.timer = setTimeout(()=>{
+						this.isSuccessDialog = false;
+					},time || 2000);
+	        	}
+	        }
+		}
+	});
+</script>
+</body>
+</html>
